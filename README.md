@@ -12,8 +12,8 @@
 
 ### SQuAD Paper
 
-[SQuAD: 100,000+ Questions for Machine Comprehension of Text](https://arxiv.org/abs/1606.05250)
-[Paper Overview](https://sh-tsang.medium.com/brief-review-squad-100-000-questions-for-machine-comprehension-of-text-f191c6b670b8)
-[Stanford CoreNLP](https://stanfordnlp.github.io/CoreNLP/)
-[Dependency Parsing](https://towardsdatascience.com/natural-language-processing-dependency-parsing-cf094bbbe3f7)
-[Universal Dependency Table](https://universaldependencies.org/u/dep/)
+[SQuAD: 100,000+ Questions for Machine Comprehension of Text](https://arxiv.org/abs/1606.05250) <br>
+[Paper Overview](https://sh-tsang.medium.com/brief-review-squad-100-000-questions-for-machine-comprehension-of-text-f191c6b670b8) <br>
+[Stanford CoreNLP](https://stanfordnlp.github.io/CoreNLP/) <br>
+[Dependency Parsing](https://towardsdatascience.com/natural-language-processing-dependency-parsing-cf094bbbe3f7) <br>
+[Universal Dependency Table](https://universaldependencies.org/u/dep/) <br>
