@@ -1,4 +1,4 @@
-# ES613-NLP
+# CS613-NLP
 
 ## File Structure
 
