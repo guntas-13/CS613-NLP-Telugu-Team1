@@ -3,7 +3,7 @@
 ## Team Members
 The individual contributions as in the sources scraped and crawled by each team member is visible in the [excel sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?usp=sharing). Apart from that the contributions include:
 1. **Bhavik Patel (22110047)** - Handling of server files and organising the entire codebase into main directories and sub-directories across local machines and the server. Effort towards compiling the enitre data onto the server. Finally assisted in entering data in the sheet.
-2. **Guntas Singh Saran (22110089)** - Writing and summarising this `README.md` file. Assisted in compiling the pipelined code for DeDuplication using MinHashLSH. Made codes for uploading the datasets onto [HuggingFace](https://huggingface.co/guntas-13).
+2. **Guntas Singh Saran (22110089)** - Writing and summarising this `README.md` file. Assisted in compiling the pipelined code for DeDuplication using MinHashLSH. Made codes for uploading the datasets onto [HuggingFace](https://huggingface.co/guntas-13). Maintained the GitHub Repository.
 3. **Hitesh Kumar (22110098)** - Compiling of all the Pre-Existing Corpus and Loading these datasets from `.parquet` files to `.csv` to finally `.txt` files. Effort towards compiling the enitre data onto the server. Finally assisted in entering data in the sheet.
 4. **Ruchit Jagodara (22110102)** - Figured out using `BeautifulSoup` for crawling and scraping. Assisted in compiling the pipelined code for DeDuplication using MinHashLSH.
 5. **Jinil Patel (22110184)** - Assisted in the writing the Data PreProcessing codes and compilation of the BadWords. Finally assisted in entering data in the sheet.
@@ -34,7 +34,7 @@ The individual contributions as in the sources scraped and crawled by each team 
 **The screenshot above does not contain the entire data and even this data is still in `.csv` format, which got even expanded after converting them to individual `.txt` files.**
 
 
-## Data Scraping and Crawling
+## Data Scraping and Crawling [`Scraping_CrawlingCodes`](https://github.com/guntas-13/CS613-NLP/tree/main/Scraping_CrawlingCodes)
 <div align = "center">
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Crawling.jpeg" style="width: 80%">
 </div>
@@ -100,7 +100,7 @@ def extract_data_from_html(html_content):
 ```
 
 
-## Data Preprocessing
+## Data Preprocessing [`DataPreprocessing`](https://github.com/guntas-13/CS613-NLP/tree/main/DataPreprocessing)
 
 ### 1. `TextToCSV.py`
 This script processes text files from a specified directory, extracting links and text content, and compiles them into a single CSV file. Since initially we had scraped files as separate `.txt` files, it was necessary that for summarising the data, this was needed.
@@ -157,9 +157,9 @@ def remove_strings_from_row(content, strings_to_remove):
 </div>
 
 
-## Data DeDuplication
+## Data DeDuplication [`DeDuplication`](https://github.com/guntas-13/CS613-NLP/tree/main/DeDuplication)
 
-**We were not able to perform deduplication on the entire dataset but did on a subset on local machine of 3 sources. Although we were atleast to compile all the data on the server to be ready for deduplication but owing to time constraints, we were not able to finish it. Hence the task of making the final table is still incomplete**
+**We were not able to perform deduplication on the entire dataset but did on a subset on local machine of 3 sources. Although we were atleast to compile all the data on the server to be ready for deduplication owing to time constraints, we were not able to finish it. Hence the task of making the final table is still incomplete**
 
 ### 1. `CreateFilePaths.py`
 
