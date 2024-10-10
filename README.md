@@ -1,16 +1,41 @@
-# CS613-NLP
+# CS613-NLP Team-1 Telugu
 
-## File Structure
+## Team Members
+1. Bhavik Patel (22110047)
+2. Guntas Singh Saran (22110089)
+3. Hitesh Kumar (22110098)
+4. Ruchit Jagodara (22110102)
+5. Jinil Patel (22110184)
 
-1. Directory `<SourceName>-<TeamMemberName>` should contain `LinkScrape` directory where the Link scraping codes are present and `WebCrawl` directory where the Text Parsing from each weblink codes are present.
-2. Additionally the main directory `<SourceName>-<TeamMemberName>` can contain the Jupyter Notebook where a dry run must have taken place before making the scraping and crawling links.
-3. `badwords.json` contains the JSON file of Telugu + English bad words that are to be removed from the text.
-4. `HuggingFace.ipynb` demonstrates how existing corpus in `.parquet` can be dowloaded.
-5. Later these `.parquet` files have to be read using `pandas` and then have to be parsed for each row to get the text into separate `.txt` files.
+## [Telugu Corpus Sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?gid=1042635267#gid=1042635267)
+
+- Equal contributions from all the team members ensured that the [sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?usp=sharing) was updated time to time.
+- We compiled a lot of pre-existing corpus from HuggingFace including **AI4Bharat**, **WikiMedia**, **ROOTS**, **ALLENAI**, **OSCAR** and many more but downloading from just 5-6 sources provided 100GB+ of clean data for Telugu.
+- We compiled almost **13GB** of crawled data and **120GB** of existing data.
+- Much of the data was removed in the **pre-processing** stage. Like we scraped the entire **Telugu Wikipedia** amounting to **3.6GB+**, yet owing to bad words or sensitive information, much of it got filtered out in the pre-processing.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/MainSheet.png" style="width: 80%">
+</div>
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/PreProcessed.png" style="width: 80%">
+</div>
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Existing.png" style="width: 80%">
+</div>
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/CSVs.jpeg" style="width: 50%">
+</div>
+
+**The screenshot above does not contain the entire data and even this data is still in `.csv` format, which got even expanded after converting them to individual `.txt` files.**
+
 
 ## Data Scraping and Crawling
 <div align = "center">
-<img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Crawling.jpeg" style="width: 80%">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Crawling.jpeg" style="width: 80%">
 </div>
 
 Initially, we were using `Selenium` but quite early on switched to `BeautifulSoup` for this task. We employed `Multi-threading` to speed up the scraping and crawling tasks. <br>
@@ -19,14 +44,60 @@ Our basic pipeline was:
 - We created a main folder for each source named `<source-name>-<team-member>`.
 - In each of these folders, there were two folders `WebCrawl` and `LinkScrape`.
 - Additionally, the main folder also contained a Jupyter Notebook that was used as an experimentation to know the interface of that particular source.
-- All the scraped links were stored in `.csv` files and then later the crawling code took over, saving each individual article in separate `.txt` files.
+- All the scraped links were stored in `.csv` files, and then later, the crawling code took over, saving each individual article in separate `.txt` files.
 
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/MainFile.png" style="width: 40%">
+</div>
+
+An example of `LinkScrape.py`
 ```python
 from bs4 import BeautifulSoup
 import urllib.request
+
+def get_links(content):
+    soup = BeautifulSoup(content, 'html.parser')
+    main_div = soup.find('div', class_='band')
+    anchors = main_div.find_all('a', class_="read-more", href=True)
+    links = [a['href'] for a in anchors]
+    return links
+
+def crawl_data_from_link_with_retry(link, max_retries=3, retry_interval=5):
+    retries = 0
+    while retries < max_retries:
+        try:
+            response = urllib.request.urlopen(link)
+            if response.status == 200:
+                return response.read()
+            else:
+                print(f"Failed to fetch data from {link}. Retrying... ({retries + 1}/{max_retries})")
+                retries += 1
+                time.sleep(retry_interval)
+        except Exception as e:
+            print(f"An error occurred while fetching data from {link}: {e}. Retrying... ({retries + 1}/{max_retries})")
+            retries += 1
+            time.sleep(retry_interval)
+    print(f"Failed to fetch data from {link} after {max_retries} retries.")
+    return None
 ```
 
-### [Telugu Corpus Sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?gid=1042635267#gid=1042635267)
+An example of `WebCrawl.py`
+```python
+def extract_data_from_html(html_content):
+    try:
+        soup = BeautifulSoup(html_content, "html.parser")
+        
+        extracted_data = ""
+        for paragraph in soup.find_all('p'):
+            extracted_data += paragraph.get_text() + "\n"
+
+    except Exception as e:
+        print(f"An error occurred while extracting Telugu data: {e}")
+    
+    return extracted_data
+```
+
 
 ## Data Preprocessing
 ### 1. `TextToCSV.py`
@@ -74,6 +145,28 @@ This script processes the CSV files containing similarity results, determining w
 
 ### 5. `FinalRemove.py`
 The final script reads a list of files to be removed from a text file and deletes those files from the filesystem.
+
+
+## Data Uploading to Server and HuggingFace
+
+- Since our pipeline had several raw `.txt` files and bad/clean `.csv` files we tried to upload them as single `.zip` file to [HuggingFace](https://huggingface.co/guntas-13).
+- Later the clean data which was in `.csv` format was uploaded in `dataset` repositories on HuggingFace and those were in `.parquet` format, which were easily downloaded on the server side or any other machine
+- We used the notebook [`DataUpload.ipynb`](https://github.com/guntas-13/CS613-NLP/blob/main/DataUpload.ipynb) to upload the datasets over on HuggingFace.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/HF.png" style="width: 80%">
+</div>
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Repo.png" style="width: 45%; float: left;">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/dataset.png" style="width: 45%; float: left;">
+</div>
+
+Quite we leveraged script commands to transfer data from our local machines by zipping also to the server using:
+
+```bash
+scp <local_file> telugu_nlp@10.0.62.212:<filepath_on_server>
+```
 
 
 ## MinHashLSH Algorithm
