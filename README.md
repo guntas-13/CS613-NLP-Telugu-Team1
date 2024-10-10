@@ -10,8 +10,32 @@
 
 ### [Telugu Corpus Sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?gid=1042635267#gid=1042635267)
 
+## Data Preprocessing
+### 1. `TextToCSV.py`
+This script processes text files from a specified directory, extracting links and text content, and compiles them into a single CSV file. Since initially we had scraped files as separate `.txt` files, it was necessary that for summarising the data, this was needed.
 
-## DeDuplication
+### 2. `PreProcess.py`
+This script cleans a CSV file by removing entries that contain unwanted content, such as **bad words**, email addresses, and phone numbers. <br>
+We had compiled bad words from the this [source](https://github.com/thisandagain/washyourmouthoutwithsoap/blob/develop/data/build.json) and later with the help of our Telugu friends, we added more words and made the [`badwords.json`](https://github.com/guntas-13/CS613-NLP/blob/main/badwords.json). We further made sure that no personal information gets leaked into the corpus like phone numbers or email addresses; and all those articles we're flagged and removed. <br> <br>
+`PreProcess.py` takes your data in `.csv` format and separates the data into two files - `<source>_clean_articles.csv` and `<source>_bad_articles.csv`. The latter file also contains a column to show why that particular article has been flagged and removed.
+
+#### Regular Expression Patterns
+Next, the script defines regular expression patterns for identifying email addresses and phone numbers:
+
+```python
+bad_words = "|".join(bad_words)
+email_pattern = r"\S+@\S+"
+phone_pattern = r'[\+\(]?[0-9][0-9 .\-\(\)]{5,}[0-9]'
+correct_phone_pattern = r"\s?\d{4}-\d{4}\s?$"
+```
+
+- `bad_words`: A combined pattern of bad words.
+- `email_pattern`: Matches standard email formats.
+- `phone_pattern`: Matches various phone number formats.
+- `correct_phone_pattern`: Ensures phone numbers follow a specific formatting standard (e.g., 1234-5678).
+
+
+## Data DeDuplication
 ### 1. `CreateFilePaths.py`
 
 This script scans specified directories for `.txt` files and compiles their paths into a CSV file. It utilizes multithreading for faster processing.
