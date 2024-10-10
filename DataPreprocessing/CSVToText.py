@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-clean_csv_path = '../TeluguData/ROOTS_MKB.csv'
-output_folder = '../TeluguData/ROOTS_MKB'
+clean_csv_path = '../TeluguData/cleaned_TeluguStop_clean_articles.csv'
+output_folder = '../TeluguData/TeluguStop'
 
 os.makedirs(output_folder, exist_ok=True)
 
