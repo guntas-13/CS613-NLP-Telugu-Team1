@@ -7,7 +7,7 @@ def process_file(file_path):
     """Returns the file_path"""
     return file_path
 
-def calculate_simhashes_and_save(folder_paths, output_csv):
+def filepath_and_save(folder_paths, output_csv):
     """Compiles the file_paths of the files given folder paths and save to a CSV file."""
     file_paths = []
     for folder in folder_paths:
@@ -31,4 +31,4 @@ def calculate_simhashes_and_save(folder_paths, output_csv):
 if __name__ == '__main__':
     folder_paths = ['../TeluguData/TeluguPost', '../TeluguData/Tupaki', '../TeluguData/TeluguStop']
     output_csv = '../TeluguData/filepaths.csv'
-    calculate_simhashes_and_save(folder_paths, output_csv)
+    filepath_and_save(folder_paths, output_csv)
