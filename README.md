@@ -85,13 +85,13 @@ MinHash allows us to approximate the Jaccard similarity between two sets by appl
 Let $h_1, h_2, \ldots, h_k$ be a family of random hash functions. For each set $A$, compute the minimum value of the hash functions for each permutation:
 
 ```math
-\text{MinHash}(A) = \left( \min(h_1(A)), \min(h_2(A)), \ldots, \min(h_k(A)) \right)
+\text{MinHash}(A) = \left(\min(h_1(A)), \min(h_2(A)), \ldots, \min(h_k(A))\right)
 ```
 
 The probability that the minimum hash values for two sets $A$ and $B$ are the same is equal to the Jaccard similarity:
 
 ```math
-P(\min(h_i(A)) = \min(h_i(B)) ) = J(A, B)
+P(\min(h_i(A)) = \min(h_i(B))) = J(A, B)
 ```
 
 Thus, the more MinHashes that match between two sets, the more similar the sets are, with the proportion of matching MinHashes approximating the Jaccard similarity:
