@@ -59,7 +59,6 @@ def deduplicate_files(filepaths, threshold=0.8, output_file_path='similarity_res
     index = 0
     iteration_index = 0
     no_of_files = 1000000  # Number of results to save at once
-    total_duplicates = 0  # Counter for total duplicates found
 
     # Use multiprocessing to generate MinHashes for all files
     with Pool(cpu_count()) as pool:
