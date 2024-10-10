@@ -1,17 +1,18 @@
 # CS613-NLP Team-1 Telugu
 
 ## Team Members
-1. Bhavik Patel (22110047)
-2. Guntas Singh Saran (22110089)
-3. Hitesh Kumar (22110098)
-4. Ruchit Jagodara (22110102)
-5. Jinil Patel (22110184)
+The individual contributions as in the sources scraped and crawled by each team member is visible in the [excel sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?usp=sharing). Apart from that the contributions include:
+1. **Bhavik Patel (22110047)** - Handling of server files and organising the entire codebase into main directories and sub-directories across local machines and the server. Effort towards compiling the enitre data onto the server. Finally assisted in entering data in the sheet.
+2. **Guntas Singh Saran (22110089)** - Writing and summarising this `README.md` file. Assisted in compiling the pipelined code for DeDuplication using MinHashLSH. Made codes for uploading the datasets onto [HuggingFace](https://huggingface.co/guntas-13).
+3. **Hitesh Kumar (22110098)** - Compiling of all the Pre-Existing Corpus and Loading these datasets from `.parquet` files to `.csv` to finally `.txt` files. Effort towards compiling the enitre data onto the server. Finally assisted in entering data in the sheet.
+4. **Ruchit Jagodara (22110102)** - Figured out using `BeautifulSoup` for crawling and scraping. Assisted in compiling the pipelined code for DeDuplication using MinHashLSH.
+5. **Jinil Patel (22110184)** - Assisted in the writing the Data PreProcessing codes and compilation of the BadWords. Finally assisted in entering data in the sheet.
 
 ## [Telugu Corpus Sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?gid=1042635267#gid=1042635267)
 
 - Equal contributions from all the team members ensured that the [sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?usp=sharing) was updated time to time.
 - We compiled a lot of pre-existing corpus from HuggingFace including **AI4Bharat**, **WikiMedia**, **ROOTS**, **ALLENAI**, **OSCAR** and many more but downloading from just 5-6 sources provided 100GB+ of clean data for Telugu.
-- We compiled almost **13GB** of crawled data and **120GB** of existing data.
+- We compiled almost **~13GB** of crawled data with **11.7L+** articles crawled and around **~120GB** of existing data.
 - Much of the data was removed in the **pre-processing** stage. Like we scraped the entire **Telugu Wikipedia** amounting to **3.6GB+**, yet owing to bad words or sensitive information, much of it got filtered out in the pre-processing.
 
 <div align = "center">
@@ -100,6 +101,7 @@ def extract_data_from_html(html_content):
 
 
 ## Data Preprocessing
+
 ### 1. `TextToCSV.py`
 This script processes text files from a specified directory, extracting links and text content, and compiles them into a single CSV file. Since initially we had scraped files as separate `.txt` files, it was necessary that for summarising the data, this was needed.
 
@@ -107,6 +109,10 @@ This script processes text files from a specified directory, extracting links an
 This script cleans a CSV file by removing entries that contain unwanted content, such as **bad words**, email addresses, and phone numbers. <br>
 We had compiled bad words from the this [source](https://github.com/thisandagain/washyourmouthoutwithsoap/blob/develop/data/build.json) and later with the help of our Telugu friends, we added more words and made the [`badwords.json`](https://github.com/guntas-13/CS613-NLP/blob/main/badwords.json). We further made sure that no personal information gets leaked into the corpus like phone numbers or email addresses; and all those articles we're flagged and removed. <br> <br>
 `PreProcess.py` takes your data in `.csv` format and separates the data into two files - `<source>_clean_articles.csv` and `<source>_bad_articles.csv`. The latter file also contains a column to show why that particular article has been flagged and removed.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/PreProcess.png" style="width: 90%">
+</div>
 
 #### Regular Expression Patterns
 Next, the script defines regular expression patterns for identifying email addresses and phone numbers:
@@ -123,14 +129,44 @@ correct_phone_pattern = r"\s?\d{4}-\d{4}\s?$"
 - `phone_pattern`: Matches various phone number formats.
 - `correct_phone_pattern`: Ensures phone numbers follow a specific formatting standard (e.g., 1234-5678).
 
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/BadWords.jpeg" style="width: 80%">
+</div>
+
+<div align = "center">
+<i>Screenshot showing why articles were flagged and removed containing sensitive information or bad words.</i>
+</div>
+
+### 3. `HyperLinks.py`
+This script processes the cleaned CSV file to extract English text segments and modify the original content to replace unwanted strings, such as hyperlinks using the `<|hyperlink|>` tag.
+
+```python
+segments = re.findall(r'[a-zA-Z0-9»!@#$%^&*()_+={}\[\]:;"\'|\\<,>.?/~\s\n%+^-]+', text)
+
+def remove_strings_from_row(content, strings_to_remove):
+    if len(strings_to_remove) > 0 and (("https" in strings_to_remove) or ("www" in strings_to_remove) or ("http" in strings_to_remove) or ("http://" in strings_to_remove)):
+        if strings_to_remove[-1] == " " or strings_to_remove[-1] == "\n" or strings_to_remove[-1] == "»":
+            content = content.replace(strings_to_remove[:-1], ' <|hyperlink|> ')
+        else:
+            content = content.replace(strings_to_remove, ' <|hyperlink|> ')
+    return content
+```
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/HyperLinks.png" style="width: 80%">
+</div>
+
 
 ## Data DeDuplication
+
+**We were not able to perform deduplication on the entire dataset but did on a subset on local machine of 3 sources. Although we were atleast to compile all the data on the server to be ready for deduplication but owing to time constraints, we were not able to finish it. Hence the task of making the final table is still incomplete**
+
 ### 1. `CreateFilePaths.py`
 
 This script scans specified directories for `.txt` files and compiles their paths into a CSV file. It utilizes multithreading for faster processing.
 
 ### 2. `MinHashLSH_Query.py`
-This script reads file paths from the CSV generated by the previous script, computes MinHash signatures for each file, and uses Locality-Sensitive Hashing (LSH) to identify duplicates.
+This script reads file paths from the CSV generated by the previous script, computes MinHash signatures for each file, and uses Locality-Sensitive Hashing (LSH) to identify duplicates. We set the Jaccard Similarity threshold at **0.8**.
 
 **Key Functions**:
 
@@ -146,6 +182,64 @@ This script processes the CSV files containing similarity results, determining w
 ### 5. `FinalRemove.py`
 The final script reads a list of files to be removed from a text file and deletes those files from the filesystem.
 
+### 6. [`stats.sh`](https://github.com/guntas-13/CS613-NLP/blob/main/DeDuplication/stats.sh)
+We even wrote a bash script that would give the number of files and the folder size for each of the sources in our main folder.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Script.png" style="width: 80%;">
+</div>
+
+
+## The DeDuplication Pipeline
+
+- All the sources need to be present in one main folder as directory containing all the articles from that source in `.txt` format.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Corpus.png" style="width: 40%; float: left;">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/FileStructure.png" style="width: 40%;">
+</div>
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Server.jpeg" style="width: 100%;">
+</div>
+
+<div align = "center">
+    <i>An attempt at how we were compiling all our data onto the server to be ready for deduplication.</i>
+</div>
+
+- Then after this file setup, we ran `CreateFilePaths.py` that gave each article a unique ID in terms of their filepaths on the respective machines.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/FilePaths.png" style="width: 20%;">
+</div>
+
+- Next two directories needed to be created `Similarity` and `Logs` and the script `MinHashLSH_Query.py` was run. This will create CSVs in the `Similarity` directory in chunks to avoid RAM overflows. These CSVs contain the duplicates figured out by the LSH object with their actual similarity values with its neighbours to later account for FALSE POSITIVES.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/SimilarityDir.png" style="width: 40%;">
+</div>
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/SimilarityLSH.png" style="width: 80%;">
+</div>
+
+<div align = "center">
+    <i>Notice how there are 2 false positives with similarity less than 0.8 that came in. These will be filtered.</i>
+</div>
+
+- Now once, we have these CSVs, we run `FilterFalse.py` that will overwrite these CSVs, removing the rows that were False Positives.
+- Then `FilterDuplicates.py` is run, which will check which file to remove out of the pair in a row in the above CSVs. This will create a log `.txt` file in the `Logs` directory of the **filepaths** of all the articles that need to be removed.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Logs.png" style="width: 40%;">
+</div>
+
+- Then at last the `FinalRemove.py` is run that will do the honours of discarding these logged files.
+
+<div align = "center">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/ToDelete.png" style="width: 20%;">
+</div>
+
 
 ## Data Uploading to Server and HuggingFace
 
@@ -159,10 +253,10 @@ The final script reads a list of files to be removed from a text file and delete
 
 <div align = "center">
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Repo.png" style="width: 45%; float: left;">
-    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/dataset.png" style="width: 45%; float: left;">
+    <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/dataset.png" style="width: 45%;">
 </div>
 
-Quite we leveraged script commands to transfer data from our local machines by zipping also to the server using:
+Quite we leveraged script commands to transfer data from our local machines by zipping also to the server using the server copy (`scp`) command:
 
 ```bash
 scp <local_file> telugu_nlp@10.0.62.212:<filepath_on_server>
@@ -170,6 +264,10 @@ scp <local_file> telugu_nlp@10.0.62.212:<filepath_on_server>
 
 
 ## MinHashLSH Algorithm
+
+_Source: https://leons.im/posts/a-python-implementation-of-simhash-algorithm/_ <br>
+_Souce: https://ekzhu.com/datasketch/minhash.html_ <br>
+_Source: https://blog.dataiku.com/joining-the-dots-efficiently-scaling-set-matching-with-lazo-and-minhashlsh_
 
 The MinHashLSH (MinHash Locality-Sensitive Hashing) algorithm is a powerful technique for estimating the Jaccard similarity between sets. The main idea is to reduce the dimensionality of the data while preserving the pairwise similarity between sets. The process involves several key steps:
 
@@ -287,8 +385,6 @@ This probability increases as the similarity $p$ increases, meaning that similar
 LSH works by balancing these trade-offs, with parameters $b$ and $r$ controlling the precision of the approximation.
 
 ### Example Code
-_Source: https://leons.im/posts/a-python-implementation-of-simhash-algorithm/_ <br>
-_Souce: https://ekzhu.com/datasketch/minhash.html_
 ```python
 import os
 import re
