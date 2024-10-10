@@ -8,6 +8,24 @@
 4. `HuggingFace.ipynb` demonstrates how existing corpus in `.parquet` can be dowloaded.
 5. Later these `.parquet` files have to be read using `pandas` and then have to be parsed for each row to get the text into separate `.txt` files.
 
+## Data Scraping and Crawling
+<div align = "center">
+<img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Crawling.jpeg" style="width: 80%">
+</div>
+
+Initially, we were using `Selenium` but quite early on switched to `BeautifulSoup` for this task. We employed `Multi-threading` to speed up the scraping and crawling tasks. <br>
+Our basic pipeline was:
+
+- We created a main folder for each source named `<source-name>-<team-member>`.
+- In each of these folders, there were two folders `WebCrawl` and `LinkScrape`.
+- Additionally, the main folder also contained a Jupyter Notebook that was used as an experimentation to know the interface of that particular source.
+- All the scraped links were stored in `.csv` files and then later the crawling code took over, saving each individual article in separate `.txt` files.
+
+```python
+from bs4 import BeautifulSoup
+import urllib.request
+```
+
 ### [Telugu Corpus Sheet](https://docs.google.com/spreadsheets/d/1Kr59i-8Gyhi3ehN_hLVCPdBcms7L07xNUUFsTW3uFDk/edit?gid=1042635267#gid=1042635267)
 
 ## Data Preprocessing
