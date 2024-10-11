@@ -159,7 +159,7 @@ def remove_strings_from_row(content, strings_to_remove):
 
 ## Data DeDuplication [`DeDuplication`](https://github.com/guntas-13/CS613-NLP/tree/main/DeDuplication)
 
-**We were not able to perform deduplication on the entire dataset but did on a subset on local machine of 3 sources. Although we were atleast to compile all the data on the server to be ready for deduplication owing to time constraints, we were not able to finish it. Hence the task of making the final table is still incomplete**
+**We were not able to perform deduplication on the entire dataset but did on a subset on a local machine of 3 sources. Although we were at least able to compile all the data on the server to be ready for deduplication, owing to time constraints, we were not able to finish it. Hence the task of making the final table is still incomplete**
 
 ### 1. `CreateFilePaths.py`
 
@@ -207,13 +207,13 @@ We even wrote a bash script that would give the number of files and the folder s
     <i>An attempt at how we were compiling all our data onto the server to be ready for deduplication.</i>
 </div>
 
-- Then after this file setup, we ran `CreateFilePaths.py` that gave each article a unique ID in terms of their filepaths on the respective machines.
+- Then, after this file setup, we ran `CreateFilePaths.py` that gave each article a unique ID in terms of their file paths on the respective machines.
 
 <div align = "center">
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/FilePaths.png" style="width: 20%;">
 </div>
 
-- Next two directories needed to be created `Similarity` and `Logs` and the script `MinHashLSH_Query.py` was run. This will create CSVs in the `Similarity` directory in chunks to avoid RAM overflows. These CSVs contain the duplicates figured out by the LSH object with their actual similarity values with its neighbours to later account for FALSE POSITIVES.
+- Next, two directories needed to be created, `Similarity` and `Logs`, and the script `MinHashLSH_Query.py` was run. This will create CSVs in the `Similarity` directory in chunks to avoid RAM overflows. These CSVs contain the duplicates figured out by the LSH object with their actual similarity values with its neighbors to later account for FALSE POSITIVES.
 
 <div align = "center">
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/SimilarityDir.png" style="width: 40%;">
@@ -224,7 +224,7 @@ We even wrote a bash script that would give the number of files and the folder s
 </div>
 
 <div align = "center">
-    <i>Notice how there are 2 false positives with similarity less than 0.8 that came in. These will be filtered.</i>
+    <i>Notice how there are 2 false positives with a similarity of less than 0.8 that came in. These will be filtered.</i>
 </div>
 
 - Now once, we have these CSVs, we run `FilterFalse.py` that will overwrite these CSVs, removing the rows that were False Positives.
@@ -234,7 +234,7 @@ We even wrote a bash script that would give the number of files and the folder s
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/Logs.png" style="width: 40%;">
 </div>
 
-- Then at last the `FinalRemove.py` is run that will do the honours of discarding these logged files.
+- Then, at last, the `FinalRemove.py` is run, which will do the honors of discarding these logged files.
 
 <div align = "center">
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/ToDelete.png" style="width: 20%;">
@@ -256,10 +256,10 @@ We even wrote a bash script that would give the number of files and the folder s
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/Media/dataset.png" style="width: 45%;">
 </div>
 
-Quite we leveraged script commands to transfer data from our local machines by zipping also to the server using the server copy (`scp`) command:
+Quite often we leveraged script commands to transfer data from our local machines by zipping also to the server using the server copy (`scp`) command:
 
 ```bash
-scp <local_file> telugu_nlp@10.0.62.212:<filepath_on_server>
+scp <local_file_path> telugu_nlp@10.0.62.212:<file_path_on_server>
 ```
 
 
