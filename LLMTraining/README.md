@@ -39,3 +39,6 @@ https://iitgnacin-my.sharepoint.com/:f:/g/personal/22110089_iitgn_ac_in/EsPZ6u3k
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/LLMTraining/perplexity_vs_epoch.png" style="width: 100%">
 </div>
 
+More, graphs can be found in https://wandb.ai/guntas-13-indian-institute-of-technology-gandhinagar/huggingface/reports/Telugu-LLM-Training--VmlldzoxMDE5NTczNA?accessToken=4se1t0m6yinn37cpeduyz08vbiwi96f6hpjc7du9jqq7vfknnl7mozwymbjoojss&panelId=s7xrjynnm.
+
+
