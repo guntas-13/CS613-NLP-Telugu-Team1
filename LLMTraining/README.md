@@ -14,7 +14,7 @@
 
 Below is the graph between text length and fertility score of different models.
 
-> **_NOTE:_** here, we have used text length as a measurement for dataset size.
+> **_NOTE:_** Here, text length means MBs of data.
 > 
 <div align = "center">
     <img src = "https://github.com/guntas-13/CS613-NLP/blob/main/LLMTraining/Tokenizers.png" style="width: 100%">
