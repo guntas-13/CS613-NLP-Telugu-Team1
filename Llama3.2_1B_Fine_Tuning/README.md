@@ -84,7 +84,7 @@
 
   | **Pretrained (Zero-shot)** | **Fine-tuned**       |
   |--------------------|------------------------|
-  |![Zero-shot](images/qa_evalbefore.png) | ![Accuracy Fine-tuned](images/qa_evalafter.png) |
+  | <img src="images/qa_evalbefore.png" width="200px"> | <img src="images/qa_evalafter.png" width="200px"> |
 
 ---
 
@@ -122,15 +122,48 @@ Fine-tuned models are uploaded to the 🤗 Hub:
 
 #### **6. Analysis of Results**
 
-- **Higher Scores in Fine-Tuned Models:**  
-  - Fine-tuning improves model understanding by adapting it to specific tasks and datasets.  
-  - Metrics such as F1 Score and Exact Match are significantly higher due to task-specific training.  
+1. Classification Task: SST-2
+    - **Higher Scores in Fine-Tuned Models:**  
+      - The fine-tuned models exhibit higher scores compared to the pre-trained models on the zero-shot evaluation. This is because the fine-tuned models are more task-specific and have learned the patterns specific to the SST-2 dataset.
+      - The fine-tuned models have a task-specific head that is trained on the SST-2 dataset, which helps in capturing the sentiment patterns effectively.
+      - The fine-tuned models are more specialized for the SST-2 task, leading to better performance compared to the zero-shot evaluation.
 
-- **Understanding Parameter Behavior:**  
-  The number of parameters doesn't change post-fine-tuning. However, fine-tuning modifies weight distributions within the same parameter space, leading to improved task performance.
+    - **Understanding Parameter Behavior:**  
+      - The number of parameters in the fine-tuned model increases due to the addition of task-specific layers which has a total of 4096 parameters.
+      - The base model parameters remain the same, and the additional parameters are only trained on the task-specific dataset.
+      - The base model parameters are freezed and only the task-specific head is trained on the task-specific dataset.
 
-- **Zero-Shot vs. Fine-Tuned Performance:**  
-  - Zero-shot models generalize poorly on specialized tasks like sentiment analysis or question answering.  
-  - Fine-tuned models excel due to exposure to task-specific examples during training.
+        <p align='center'><img src="images/sst2_params.png" width="500px"> </p>
+
+    - **Zero-Shot vs. Fine-Tuned Performance:**
+      - Zero-shot models generalize poorly on specialized tasks like sentiment analysis or question answering whereas fine-tuned models are more task-specific and exhibit better performance on the respective tasks.
+
+        | **Pretrained (Zero-shot)** | **Fine-tuned**      |
+        |--------------------|------------------------|
+        |![Zero-shot](images/sst2_evalbefore.png) | ![Accuracy Fine-tuned](images/sst2_evalafter.png) |
+
+2. Question-Answering Task: SQuAD
+    - **Lower Scores in Fine-Tuned Models:**  
+      - The fine-tuned models exhibit lower scores compared to the pre-trained models on the zero-shot evaluation. Following could be the possible reasons for that:
+        - **Overfitting:** The fine-tuned models might overfit on the training data, leading to lower generalization on the test set.
+        - **Task-Specific Head:** The task-specific head added during fine-tuning might not be able to capture the underlying patterns effectively.
+        - **Data Mismatch:** The fine-tuned models might not have been exposed to a diverse range of examples during training, leading to lower performance.
+        - **Model Complexity:** The pre-trained model might be too complex for the task, leading to difficulties in fine-tuning.
+      - We were not able to fine-tune the model for a sufficient number of epochs due to computational constraints, as it was taking a lot of time to train the model on the entire dataset and also the kaggle notebook was crashing due to memory issues.
+
+
+    - **Understanding Parameter Behavior:**  
+      - The number of parameters in the fine-tuned model increases due to the addition of task-specific layers.  
+      - The base model parameters remain the same, and the additional parameters are only trained on the task-specific dataset.
+      - The base model parameters are freezed and only the task-specific head is trained on the task-specific dataset.
+
+        <p align='center'><img src="images/qa_params.png" width="500px"> </p>
+
+    - **Zero-Shot vs. Fine-Tuned Performance:**  
+      - Zero-shot models generalize poorly on specialized tasks like sentiment analysis or question answering whereas fine-tuned models are more task-specific and exhibit better performance on the respective tasks. But, due to the problems faced during training, we were not able to get the desired results.
+        
+          | **Pretrained (Zero-shot)** | **Fine-tuned**      |
+          |--------------------|------------------------|
+          |<img src="images/qa_evalbefore.png" width="300px"> | <img src="images/qa_evalafter.png" width="300px"> |
 
 ---
